@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--bootstrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <!--fontAvesome-->
+    <script src="https://use.fontawesome.com/96e3b25fed.js"></script>
+    <!--vue-->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <!--assets-->
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="assets/script.js"></script>
+
+    <title>O_o</title>
+</head>
+
+<body>
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col-8 list">
+
+                <!--список-->
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <nav>
+                            <ul class="list-ul">
+                                <li v-for="item in items" :key="item.connectionName"
+                                    @click="active = item.connectionName, mode=false">
+                                    {{ item.connectionName }}
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <div v-for="item in items" :key="item.connectionName" v-if="active == item.connectionName">
+
+                    <!--переключалка-->
+                    <div class="row  mt-3" v-if="item.boi&item.dev">
+                        <div class="col-5 cursor-pointer" @click="changeBackound()">
+                            <h5>{{modeType}}</h5>
+                        </div>
+                    </div>
+                    <div class="row  mt-3" v-if="item.boi&!item.dev">
+                        <div class="d-none">{{mode=true}}</div>
+                        <div class="col-5">
+                            <h5>БОЙ</h5>
+                        </div>
+                    </div>
+                    <div class="row  mt-3" v-if="!item.boi&item.dev">
+                        <div class="d-none">{{mode=false}}</div>
+                        <div class="col-5">
+                            <h5>DEF</h5>
+                        </div>
+                    </div>
+
+                    <!--админка-->
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div> </div>
+                            <h6>Админка {{ item.connectionName }}</h6>
+                        </div>
+                        <div class="col-12 row no-gutters justify-content-between mt-2">
+                            <div class="col-6 input-group">
+                                <input type="text" :value="mode===true?item.adminNameBoi:item.adminNameDev" readonly />
+                                <div @click="doCopy" class="input-icon"><i class="fa fa-user"></i></div>
+                            </div>
+                            <div class="col-6 input-group">
+                                <input type="text" :value="mode===true?item.adminPassBoi:item.adminPassDev" readonly>
+                                <div @click="doCopy" class="input-icon"><i class="fa fa-key"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--доступы ftp/sftp-->
+                    <div class="row mt-4">
+                        <div class="col-6 row justify-content-between">
+                            <div class="col-3">
+                                <h6>Сервер</h6>
+                            </div>
+                            <div class="col-1"><span>{{mode===true?item.typeBoi:item.tepeDev}}</span></div>
+                            <div class="col-1"><span>{{mode===true?item.portBoi:item.portDev}}</span></div>
+                        </div>
+                        <div class="col-12 row no-gutters justify-content-between mt-2">
+                            <div class="col-6 input-group">
+                                <input type="text" :value="mode===true?item.userNameBoi:item.userNameDev" readonly />
+                                <div @click="doCopy" class="input-icon"><i class="fa fa-user"></i></div>
+                            </div>
+                            <div class="col-6 input-group">
+                                <input type="text" :value="mode===true?item.passwordBoi:item.passwordDev" readonly>
+                                <div @click="doCopy" class="input-icon"><i class="fa fa-key"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-12 row no-gutters justify-content-between mt-2">
+                            <div class="col-6 input-group">
+                                <input type="text" :value="mode===true?item.hostBoi:item.hostDev" readonly />
+                                <div @click="doCopy" class="input-icon"><i class="fa fa-check-circle"></i>
+                                </div>
+                            </div>
+                            <div class="col-6 input-group">
+                                <input type="text" :value="item.wayBoi" readonly>
+                                <div @click="doCopy" class="input-icon"><i class="fa fa-truck"></i></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--GIT-->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h6>GIT</h6>
+                        </div>
+                        <div class="col-12 row no-gutters justify-content-between mt-2">
+                            <div class="input-group">
+                                <input type="text" :value="item.git" readonly />
+                                <div @click="doCopy" class="input-icon"><i class="fa fa-git"></i></div>
+                            </div>
+                        </div>
+                        <div class="col-12 row no-gutters justify-content-between mt-2" v-if="item.gitName">
+                            <div class="col-6 input-group">
+                                <input type="text" :value="item.gitName" readonly />
+                                <div @click="doCopy" class="input-icon"><i class="fa fa-user"></i></div>
+                            </div>
+                            <div class="col-6 input-group">
+                                <input type="text" :value="item.gitPass" readonly>
+                                <div @click="doCopy" class="input-icon"><i class="fa fa-key"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="copy" style="color: #67bb83;"></div>
+</body>
+
+</html>
